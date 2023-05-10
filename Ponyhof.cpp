@@ -11,6 +11,7 @@ int main()
 {
 	Ponyhof ponyhof = Ponyhof("ponys.txt");
 	ponyhof.userDialog();
+	// testing GitHub
 }
 
 Ponyhof::Ponyhof(std::string filename)

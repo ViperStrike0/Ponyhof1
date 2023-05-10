@@ -7,7 +7,6 @@ Pony::Pony(Position pos)
 
 Pony::Pony()
 {
-
 }
 
 Pony::~Pony()
