@@ -20,63 +20,87 @@ Ponyhof::Ponyhof(std::string filename)
 		for (int x = 0; x < 60; x++)
 			weide[y][x] = 0;
 
-
-	std::ifstream csvlesen;
-	csvlesen.open(filename, std::ios::in);
-	int zeile_cntr = 0;
-	
-	if (csvlesen)
+	bool error;
+	char ch;
+	do
 	{
-		std::string zeile = "";
-		while (std::getline(csvlesen, zeile))
+		error = false;
+
+		std::ifstream myFile;
+		myFile.open(filename, std::ios::in);
+		int zeile_cntr = 0;
+
+		
+		if (myFile)
 		{
-			zeile_cntr++;
-			std::istringstream s(zeile);
-			std::string wert;
-			std::vector<std::string> pferd;
-			
-			while (std::getline(s, wert, ';'))
+			try
 			{
-				pferd.push_back(wert);
-			}
 
-			if (pferd.at(0) == "Islandpferd")
-			{
-				bool ekzemer;
-				if (pferd.at(3) == "n")
-					ekzemer = false;
-				else
-					ekzemer = true;
-
-				int alter = std::stoi(pferd.at(2));
-
-				Pony* Islandpony = new Islandpferd(pferd.at(1),alter,ekzemer);
-				stallung.einstellen(Islandpony);
-			}
-			else
-			{
-				if (pferd.at(0) == "Shetlandpony")
+				std::string zeile;
+				while (std::getline(myFile, zeile))
 				{
-					bool kinderlieb;
-					if (pferd.at(3) == "n")
-						kinderlieb = false;
+					zeile_cntr++;
+					std::istringstream s(zeile);
+					std::string wert;
+					std::vector<std::string> pferd;
+
+					while (std::getline(s, wert, ';'))
+					{
+						pferd.push_back(wert);
+					}
+
+					if (pferd.at(0) == "Islandpferd")
+					{
+						bool ekzemer;
+						if (pferd.at(3) == "n")
+							ekzemer = false;
+						else
+							ekzemer = true;
+
+						int alter = std::stoi(pferd.at(2));
+
+						Pony* Islandpony = new Islandpferd(pferd.at(1), alter, ekzemer);
+						stallung.einstellen(Islandpony);
+					}
+					else if (pferd.at(0) == "Shetlandpony")
+					{
+						bool kinderlieb;
+						if (pferd.at(3) == "n")
+							kinderlieb = false;
+						else
+							kinderlieb = true;
+
+						int alter = std::stoi(pferd.at(2));
+
+						Pony* shetlandpony = new Shetlandpony(pferd.at(1), alter, kinderlieb);
+						stallung.einstellen(shetlandpony);
+					}
 					else
-						kinderlieb = true;
-
-					int alter = std::stoi(pferd.at(2));
-
-					Pony * shetlandpony = new Shetlandpony(pferd.at(1), alter, kinderlieb);
-					stallung.einstellen(shetlandpony);
+					{
+						throw "Falsches Format in Zeile";
+						error = true;
+					}
+				}
+			}
+			catch (const char* errorMsg)
+			{
+				std::cout << errorMsg << " Zeile " << zeile_cntr << "!" << std::endl;
+				std::cout << "Neu einlesen [e] oder abbrechen [a] ? ";
+				std::cin >> ch;
+				if (ch == 'e')
+				{
+					error = true;
+					continue;
 				}
 				else
 				{
-					std::cout << "Fehler:Unbekannte Pferderasse" << std::endl;
+					exit(0);
 				}
 			}
-		}
-	}
+			myFile.close();
 
-	csvlesen.close();
+		}
+	} while (error == true);
 }
 
 Ponyhof::~Ponyhof()
