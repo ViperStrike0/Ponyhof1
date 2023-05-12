@@ -11,7 +11,6 @@ int main()
 {
 	Ponyhof ponyhof = Ponyhof("ponys.txt");
 	ponyhof.userDialog();
-	// testing GitHub
 }
 
 Ponyhof::Ponyhof(std::string filename)
@@ -35,7 +34,6 @@ Ponyhof::Ponyhof(std::string filename)
 		{
 			try
 			{
-
 				std::string zeile;
 				while (std::getline(myFile, zeile))
 				{
@@ -75,6 +73,7 @@ Ponyhof::Ponyhof(std::string filename)
 						Pony* shetlandpony = new Shetlandpony(pferd.at(1), alter, kinderlieb);
 						stallung.einstellen(shetlandpony);
 					}
+			// Pferd Name != Shetland../Island.. dann throw diese Nachricht
 					else
 					{
 						throw "Falsches Format in Zeile";
@@ -82,6 +81,8 @@ Ponyhof::Ponyhof(std::string filename)
 					}
 				}
 			}
+			// Die Fehlermeldung wird hier gezeigt und der User kann entscheiden,
+			// entweder das Programm zu stoppen oder wieder einzulesen
 			catch (const char* errorMsg)
 			{
 				std::cout << errorMsg << " Zeile " << zeile_cntr << "!" << std::endl;
@@ -100,6 +101,7 @@ Ponyhof::Ponyhof(std::string filename)
 			myFile.close();
 
 		}
+			// "While" Schlife wird benutzt
 	} while (error == true);
 }
 
