@@ -25,11 +25,14 @@ Ponyhof::Ponyhof(std::string filename)
 	{
 		error = false;
 
+#ifdef WRITE_BIN
 		std::ifstream myFile;
-		myFile.open(filename, std::ios::in);
-		int zeile_cntr = 0;
-
+		myFile.open(filename);
+#else
+		myFile.open(filename, std::ios::binary);
+#endif
 		
+		int zeile_cntr = 0;
 		if (myFile)
 		{
 			try
